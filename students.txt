@@ -1,0 +1,21 @@
+-First name:Ahmed
+-Last name:Eid
+-ID:S1011
+-Mobile:01280059483
+-Email:asameh6504@gmail.com
+-C-GPA:4.0
+-Academic level:Freshman
+-Registered courses:PH129 / PH130 / CR504
+-Fullfilled credit hours:130
+-Grades:PH129->70 / PH130->80 / CR504->90
+__________________________________________________
+-First name:Ahmed
+-Last name:Eid
+-ID:S1011
+-Mobile:01280059483
+-Email:asameh6504@gmail.com
+-C-GPA:4.0
+-Academic level:Freshman
+-Registered courses:PH129 / PH130 / CR504
+-Fullfilled credit hours:130
+-Grades:PH129->70 / PH130->80 / CR504->90
