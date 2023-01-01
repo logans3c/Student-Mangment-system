@@ -337,5 +337,99 @@ def search(students_data, faculty_data):
         search_faculty(faculty_data)
     return question(students_data, faculty_data)
 
+# function in which admin can be able to add a student, Faculty member , course and an instructor 
+def add() :
+    while True :
+        print("1]Add Student\n2]Add Faculty member\n3]Add course\n4]Add instructor\n")
+        answer = input("Enter choice[1,2,3,4]: ").strip()
+        while answer not in ["1", "2", "3", "4"]:
+           answer = input("Enter a valid choice please[1,2,3,4]: ").strip()
+        if answer == "1":
+           add_student()
+        elif answer == "2":
+           add_faculty()
+        elif answer == "3":
+           add_course()
+        elif answer == "4":
+           add_instractor()
+        answer = input("Do you want to perform another operation?(y/n): ").strip().lower()
+        while answer not in ["y", "n"]:
+           answer = input("Enter a valid choice please(y/n): ")
+        if answer == "n":
+            good_bye_admin()
+            break 
+
+# newstudent_id() is a function that gets an id for the new student
+def newstudent_id() :
+    accountfile = open("accounts.txt","r")
+    data = accountfile.read()
+    accountfile.close()
+    for item in range(1,10000) :
+        new_id = "S" + str(item).rjust(4,"0")
+        if data.find(new_id) == -1 :
+            return new_id
+
+#
+def email_checker(semail) :
+    while semail.find("@") == -1 :
+        print("Your Email is invalid\nYour Email should contains '@'")
+        semail = input("Enter A valid Email :")
+    return   semail
+        
+
+# mobile_checker() checks if a mobi,e ks valid or not 
+def mobile_checker(smobile) :
+    while  (len(smobile) < 11) or ( len(smobile) > 11 ) :
+        print ("your mobile number is invalid\nA valid mobile phone number is 11 digits long")
+        smobile = input("Enter a vaild mobile ")
+    while True  :
+        if smobile.startswith("011") or smobile.startswith("012") or smobile.startswith("015") or smobile.startswith("010") :
+            return smobile
+        else :
+            print ("your mobile number should starts either with: 010, 011, 012, or 015 ")
+            smobile = input("Enter a vaild mobile ")
+    return smobile
+
+    
+# add_student() is a function that add a new student data
+def add_student() :
+        file_addstudent = open ( "students.txt","a")
+        first_name = input (" Enter your first name : ")
+        last_name = input (" Enter your last name : ")
+        student_email = input (" Enter your Email : ")
+        semail = email_checker(student_email)
+        student_mobile = input (" Enter your mobile : ")
+        smobile = mobile_checker(student_mobile)
+        student_id = newstudent_id()
+        file_addstudent.write("-"*50)
+        file_addstudent.write("\n-First name:"+first_name+"\n-Last name:"+last_name+"\n-ID:"+student_id+"\n-Mobile:"+smobile+"\n-Email"+semail)
+        file_addstudent.write("\n-C-GPA:0\n-Academic level:Freshman\n-Registered courses:PH129 / PH130 / CR504\n-Fullfilled credit hours:130\n-Grades:PH129->70 / PH130->80 / CR504->90\n")
+        file_addstudent.close()
+
+
+# newfaculty_id() is a function that gets a new id for the faculty member
+def newfaculty_id() :
+    account_file = open("accounts.txt","r")
+    data = account_file.read()
+    account_file.close()
+    for item in range(1,10000) :
+        newf_id = "F" + str(item).rjust(4,"0")
+        if data.find(newf_id) == -1 :
+            return newf_id
+
+# add_faculty() is a function that add a new faculty member to our data
+def add_faculty() :
+        file_addfaculty = open ( "faculty.txt","a")
+        first_name = input (" Enter your first name : ")
+        last_name = input (" Enter your last name : ")
+        num_courses = int(input("Enter the number of courses taught : "))
+        facultycourses = ""
+        for item in range (num_courses) :
+            courses_taught = input(" Enter the course name :")
+            facultycourses += courses_taught +"/"
+        faculty_id = newfaculty_id()
+        file_addfaculty.write("-"*50)
+        file_addfaculty.write("\n-First name:"+first_name+"\n-Last name:"+last_name+"\n-ID:"+faculty_id+"\n-Courses taught :"+facultycourses+"\n")
+        file_addfaculty.close()
 
 main()
