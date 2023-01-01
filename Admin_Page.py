@@ -337,6 +337,7 @@ def search(students_data, faculty_data):
         search_faculty(faculty_data)
     return question(students_data, faculty_data)
 
+#--------------------------------------------------------------------------------
 # function in which admin can be able to add a student, Faculty member , course and an instructor 
 def add() :
     while True :
@@ -358,7 +359,7 @@ def add() :
         if answer == "n":
             good_bye_admin()
             break 
-
+#--------------------------------------------------------------------------------
 # newstudent_id() is a function that gets an id for the new student
 def newstudent_id() :
     accountfile = open("accounts.txt","r")
@@ -369,6 +370,7 @@ def newstudent_id() :
         if data.find(new_id) == -1 :
             return new_id
 
+#--------------------------------------------------------------------------------
 #
 def email_checker(semail) :
     while semail.find("@") == -1 :
@@ -376,7 +378,7 @@ def email_checker(semail) :
         semail = input("Enter A valid Email :")
     return   semail
         
-
+#--------------------------------------------------------------------------------
 # mobile_checker() checks if a mobi,e ks valid or not 
 def mobile_checker(smobile) :
     while  (len(smobile) < 11) or ( len(smobile) > 11 ) :
@@ -390,7 +392,7 @@ def mobile_checker(smobile) :
             smobile = input("Enter a vaild mobile ")
     return smobile
 
-    
+#--------------------------------------------------------------------------------
 # add_student() is a function that add a new student data
 def add_student() :
         file_addstudent = open ( "students.txt","a")
@@ -406,7 +408,7 @@ def add_student() :
         file_addstudent.write("\n-C-GPA:0\n-Academic level:Freshman\n-Registered courses:PH129 / PH130 / CR504\n-Fullfilled credit hours:130\n-Grades:PH129->70 / PH130->80 / CR504->90\n")
         file_addstudent.close()
 
-
+#--------------------------------------------------------------------------------
 # newfaculty_id() is a function that gets a new id for the faculty member
 def newfaculty_id() :
     account_file = open("accounts.txt","r")
@@ -416,7 +418,7 @@ def newfaculty_id() :
         newf_id = "F" + str(item).rjust(4,"0")
         if data.find(newf_id) == -1 :
             return newf_id
-
+#--------------------------------------------------------------------------------
 # add_faculty() is a function that add a new faculty member to our data
 def add_faculty() :
         file_addfaculty = open ( "faculty.txt","a")
@@ -431,5 +433,5 @@ def add_faculty() :
         file_addfaculty.write("-"*50)
         file_addfaculty.write("\n-First name:"+first_name+"\n-Last name:"+last_name+"\n-ID:"+faculty_id+"\n-Courses taught :"+facultycourses+"\n")
         file_addfaculty.close()
-
+#--------------------------------------------------------------------------------
 main()
