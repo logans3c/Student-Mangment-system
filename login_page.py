@@ -1,15 +1,9 @@
-def admin_page() :
-    print("hello admin ")
-
 def student_page() :
     print("hello student")
-    
-
+#----------------------------------------------------
 def faculty_page() :
     print("hello faculty")
-
-            
-
+#----------------------------------------------------
 def login_page() :
     accountfile = open("accounts.txt","r")
     lines = accountfile.readlines()
@@ -23,7 +17,8 @@ def login_page() :
             if (line_details[0]==login_id) and (line_details[1]==login_pass) :
                 count = 4
                 if line_details[0].startswith("A") :
-                    admin_page()
+                    from admin import main
+                    main()
                 elif line_details[0].startswith("S"):
                     student_page()
                 elif line_details[0].startswith("F") :
@@ -37,7 +32,5 @@ def login_page() :
             print("try again")
     accountfile.close()
 
-
-
-
+#----------------------------------------------------
 login_page()
