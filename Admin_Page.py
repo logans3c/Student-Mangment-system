@@ -13,6 +13,7 @@ def main():
         "c_gpas": [],
         "levels": [],
         "registered courses": [],
+        "completed courses": [],
         "credit hours": [],
         "grades": []
     }
@@ -48,6 +49,8 @@ def main():
             students_data["credit hours"].append(attribute[1])
         elif attribute[0] == "-Grades":
             students_data["grades"].append(attribute[1])
+        elif attribute[0] == "-Completed courses":
+            students_data["completed courses"].append(attribute[1])
         else:
             continue
     for i in range(len(fdata_list)):
@@ -97,6 +100,56 @@ def menu(students_data, faculty_data):
         good_bye_admin()
 
 
+def write_data(data, filename):
+    if filename == "students.txt":
+        Students_file = open("students.txt", "w")
+
+        for i in range(len(data["ids"])):
+            for key in data:
+                if key == "first names":
+                    word = "First name"
+                elif key == "last names":
+                    word = "Last name"
+                elif key == "ids":
+                    word = "ID"
+                elif key == "mobiles":
+                    word = "Mobile"
+                elif key == "emails":
+                    word = "Email"
+                elif key == "c_gpas":
+                    word = "C-GPA"
+                elif key == "levels":
+                    word = "Academic level"
+                elif key == "registered courses":
+                    word = "Registered courses"
+                elif key == "credit hours":
+                    word = "Fullfilled credit hours"
+                elif key == "grades":
+                    word = "Grades"
+                elif key == "completed courses":
+                    word = "Completed courses"
+                Students_file.write(
+                    "-"+word+":"+data[key][i]+"\n")
+            Students_file.write("_"*50 + "\n")
+        Students_file.close()
+    elif filename == "faculty.txt":
+        Faculty_file = open("faculty.txt", "w")
+        for i in range(len(data["ids"])):
+            for key in data:
+                if key == "first names":
+                    word = "First name"
+                elif key == "last names":
+                    word = "Last name"
+                elif key == "ids":
+                    word = "ID"
+                elif key == "courses taught":
+                    word = "Courses taught"
+                Faculty_file.write("-"+word+":"+data[key][i]+"\n")
+            Faculty_file.write("_"*50 + "\n")
+        Faculty_file.close()
+    return
+
+
 def remove(students_data, faculty_data):
     def remove_student(students_data):
         id = input("Enter student id you want to delete: ").strip()
@@ -105,46 +158,51 @@ def remove(students_data, faculty_data):
         print("Loading....")
         time.sleep(1)
         if id in students_data["ids"]:
+
             id_index = students_data["ids"].index(id)
+            print("Are you sure you want to remove", students_data["first names"][id_index],
+                  students_data["last names"][id_index], "from the system (y/n): ", end="")
+            ans = input().lower().strip()
+            while ans not in ["y", "n"]:
+                ans = input(
+                    "Please enter a valid choice (y/n): ").lower().strip()
+            if ans == "n":
+                return
             for key in students_data:
                 students_data[key].remove(students_data[key][id_index])
-            print(students_data)
-            Students_file = open("students.txt", "w")
 
-            for i in range(len(students_data["ids"])):
-                for key in students_data:
-                    if key == "first names":
-                        word = "First name"
-                    elif key == "last names":
-                        word = "Last name"
-                    elif key == "ids":
-                        word = "ID"
-                    elif key == "mobiles":
-                        word = "Mobile"
-                    elif key == "emails":
-                        word = "Email"
-                    elif key == "c_gpas":
-                        word = "C-GPA"
-                    elif key == "levels":
-                        word = "Academic level"
-                    elif key == "registered courses":
-                        word = "Registered courses"
-                    elif key == "credit hours":
-                        word = "Fullfilled credit hours"
-                    elif key == "grades":
-                        word = "Grades"
-                    Students_file.write(
-                        "-"+word+":"+students_data[key][i]+"\n")
-                Students_file.write("_"*50 + "\n")
-            Students_file.close()
+            write_data(students_data, "students.txt")
+            print("Student deleted succesfully....")
+            time.sleep(0.5)
 
         else:
             print("No matching id found")
         return
 
     def remove_faculty(faculty_data):
+        id = input("Enter faculty member id you want to delete: ").strip()
+        while id[0] != "F" or len(id) != 5:
+            id = input("Enter a valid faculty member id please: ").strip()
+        print("Loading....")
+        time.sleep(1)
+        if id in faculty_data["ids"]:
+            id_index = faculty_data["ids"].index(id)
+            print("Are you sure you want to remove", faculty_data["first names"][id_index],
+                  faculty_data["last names"][id_index], "from the system (y/n): ", end="")
+            ans = input().lower().strip()
+            while ans not in ["y", "n"]:
+                ans = input(
+                    "Please enter a valid choice (y/n): ").lower().strip()
+            if ans == "n":
+                return
+            for key in faculty_data:
+                faculty_data[key].remove(faculty_data[key][id_index])
+            write_data(faculty_data, "faculty.txt")
+            print("Faculty member deleted succesfully....")
+            time.sleep(0.5)
 
-        pass
+        else:
+            print("no matching id found")
 
     choice = input(
         "1]Remove a student\n2]Remove a faculty member\nYour choice[1,2]: ").strip()
@@ -172,9 +230,22 @@ def display_info(students_data, faculty_data, index="all"):
                 print("-Academic level:"+students_data["levels"][i])
                 print("-Registered courses:" +
                       students_data["registered courses"][i])
-                print("-Fullfilled credit hours:" +
-                      students_data["credit hours"][i])
-                print("-Grades:"+students_data["grades"][i])
+                print("-Completed courses:" +
+                      students_data["completed courses"][i])
+                # calculate total credit hours to display
+                hours = students_data["credit hours"][i].split()
+                total = 0
+                for j in range(len(hours)):
+                    total += int(hours[j])
+                total = str(total)
+                print("-Fullfilled credit hours:"+total)
+                grades = students_data["grades"][i].split()
+                course = students_data["registered courses"][i].split()
+                print("-Grades:", end="")
+                for i in range(len(grades)):
+                    print(f"{course[i]}->{grades[i]}", end=" ")
+                print()
+
                 print("_"*50)
         else:
             print(f"-Name :"+students_data["first names"]
@@ -186,9 +257,21 @@ def display_info(students_data, faculty_data, index="all"):
             print(f"-Academic level:"+students_data["levels"][index])
             print(f"-Registered courses:" +
                   students_data["registered courses"][index])
+            print("-Completed courses:" +
+                  students_data["completed courses"][index])
+            hours = students_data["credit hours"][index].split()
+            total = 0
+            for i in range(len(hours)):
+                total += int(hours[i])
+            total = str(total)
             print(f"-Fullfilled credit hours:" +
-                  students_data["credit hours"][index])
-            print(f"-Grades:"+students_data["grades"][index])
+                  total)
+            grades = students_data["grades"][index].split()
+            course = students_data["registered courses"][index].split()
+            print("-Grades:", end="")
+            for i in range(len(grades)):
+                print(f"{course[i]}->{grades[i]}", end=" ")
+            print()
             print("_"*50)
             return
         return
@@ -235,6 +318,7 @@ def good_bye_admin():
     print("|")
     print("*"*50)
     print("*"*50)
+    time.sleep(1)
     exit(0)
 
 
@@ -242,7 +326,7 @@ def question(students_data, faculty_data):
     answer = input(
         "Do you want to perform another operation?(y/n): ").strip().lower()
     while answer not in ["y", "n"]:
-        answer = input("Enter a valid choice please(y/n): ")
+        answer = input("Enter a valid choice please(y/n): ").strip().lower()
     if answer == "y":
         return menu(students_data, faculty_data)
     else:
@@ -270,7 +354,7 @@ def search(students_data, faculty_data):
                     findings.append(i)
                 if students_data["last names"][i] == name and i not in findings:
                     found = 1
-                    display_info(students_data, i)
+                    display_info(students_data, 0, i)
                     findings.append(i)
             if found == 0:
                 print("No matching names found")
@@ -337,101 +421,78 @@ def search(students_data, faculty_data):
         search_faculty(faculty_data)
     return question(students_data, faculty_data)
 
-#--------------------------------------------------------------------------------
-# function in which admin can be able to add a student, Faculty member , course and an instructor 
-def add() :
-    while True :
-        print("1]Add Student\n2]Add Faculty member\n3]Add course\n4]Add instructor\n")
-        answer = input("Enter choice[1,2,3,4]: ").strip()
-        while answer not in ["1", "2", "3", "4"]:
-           answer = input("Enter a valid choice please[1,2,3,4]: ").strip()
-        if answer == "1":
-           add_student()
-        elif answer == "2":
-           add_faculty()
-        elif answer == "3":
-           add_course()
-        elif answer == "4":
-           add_instractor()
-        answer = input("Do you want to perform another operation?(y/n): ").strip().lower()
-        while answer not in ["y", "n"]:
-           answer = input("Enter a valid choice please(y/n): ")
-        if answer == "n":
-            good_bye_admin()
-            break 
-#--------------------------------------------------------------------------------
-# newstudent_id() is a function that gets an id for the new student
-def newstudent_id() :
-    accountfile = open("accounts.txt","r")
-    data = accountfile.read()
-    accountfile.close()
-    for item in range(1,10000) :
-        new_id = "S" + str(item).rjust(4,"0")
-        if data.find(new_id) == -1 :
-            return new_id
 
-#--------------------------------------------------------------------------------
-#
-def email_checker(semail) :
-    while semail.find("@") == -1 :
-        print("Your Email is invalid\nYour Email should contains '@'")
-        semail = input("Enter A valid Email :")
-    return   semail
-        
-#--------------------------------------------------------------------------------
-# mobile_checker() checks if a mobi,e ks valid or not 
-def mobile_checker(smobile) :
-    while  (len(smobile) < 11) or ( len(smobile) > 11 ) :
-        print ("your mobile number is invalid\nA valid mobile phone number is 11 digits long")
-        smobile = input("Enter a vaild mobile ")
-    while True  :
-        if smobile.startswith("011") or smobile.startswith("012") or smobile.startswith("015") or smobile.startswith("010") :
-            return smobile
-        else :
-            print ("your mobile number should starts either with: 010, 011, 012, or 015 ")
-            smobile = input("Enter a vaild mobile ")
-    return smobile
-
-#--------------------------------------------------------------------------------
-# add_student() is a function that add a new student data
-def add_student() :
-        file_addstudent = open ( "students.txt","a")
-        first_name = input (" Enter your first name : ")
-        last_name = input (" Enter your last name : ")
-        student_email = input (" Enter your Email : ")
-        semail = email_checker(student_email)
-        student_mobile = input (" Enter your mobile : ")
-        smobile = mobile_checker(student_mobile)
-        student_id = newstudent_id()
-        file_addstudent.write("-"*50)
-        file_addstudent.write("\n-First name:"+first_name+"\n-Last name:"+last_name+"\n-ID:"+student_id+"\n-Mobile:"+smobile+"\n-Email"+semail)
-        file_addstudent.write("\n-C-GPA:0\n-Academic level:Freshman\n-Registered courses:PH129 / PH130 / CR504\n-Fullfilled credit hours:130\n-Grades:PH129->70 / PH130->80 / CR504->90\n")
-        file_addstudent.close()
-
-#--------------------------------------------------------------------------------
-# newfaculty_id() is a function that gets a new id for the faculty member
-def newfaculty_id() :
-    account_file = open("accounts.txt","r")
-    data = account_file.read()
-    account_file.close()
-    for item in range(1,10000) :
-        newf_id = "F" + str(item).rjust(4,"0")
-        if data.find(newf_id) == -1 :
-            return newf_id
-#--------------------------------------------------------------------------------
-# add_faculty() is a function that add a new faculty member to our data
-def add_faculty() :
-        file_addfaculty = open ( "faculty.txt","a")
-        first_name = input (" Enter your first name : ")
-        last_name = input (" Enter your last name : ")
-        num_courses = int(input("Enter the number of courses taught : "))
-        facultycourses = ""
-        for item in range (num_courses) :
-            courses_taught = input(" Enter the course name :")
-            facultycourses += courses_taught +"/"
-        faculty_id = newfaculty_id()
-        file_addfaculty.write("-"*50)
-        file_addfaculty.write("\n-First name:"+first_name+"\n-Last name:"+last_name+"\n-ID:"+faculty_id+"\n-Courses taught :"+facultycourses+"\n")
-        file_addfaculty.close()
-#--------------------------------------------------------------------------------
 main()
+
+
+def update(students_data, faculty_data):
+    def update_student(students_data):
+        id = input("Enter student id you want to edit: ").strip()
+        while id[0] != "S" or len(id) != 5:
+            id = input("Enter a vaild student id please: ").strip()
+        if id in students_data["ids"]:
+            id_index = students_data["ids"].index(id)
+            print("Student info".center("#", 50))
+            display_info(students_data, 0, id_index)
+            print("#"*50)
+            choice = input("1]Update first name\t2]Update last name\t3]Update ID\t4]Update mobile\n5]Update email\t6]Update C-GPA\t7]Update registered courses\n8]Update credit hours\t9]Update grades\n\nYour choice (from 1 to 9): ").strip()
+            while choice not in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                choice = input(
+                    "Enter a valid choice please (from 1 to 9): ").strip()
+            if choice == "1":
+                name = input(
+                    "Enter his updated first name: ").capitalize().strip()
+                students_data["first names"][id_index] = name
+            elif choice == "2":
+                name = input(
+                    "Enter his updated last name: ").capitalize().strip()
+                students_data["last names"][id_index] = name
+            elif choice == "3":
+                id = input("Enter updated id: ").strip()
+                while id[0] != "S" or len(id) != 5 or (id in students_data["ids"]):
+                    if id in students_data:
+                        id = input(
+                            "...Id already exists...\nEnter a valid new id: ").strip()
+                    else:
+                        id = input("Enter a valid new id: ").strip()
+                students_data["ids"][id_index] = id
+            elif choice == "4":
+                mobile = input("Enter updated mobile number: ").strip()
+                while len(mobile) != 11 or (mobile[0:3] not in ["012", "011", "010", "015"]):
+                    mobile = input(
+                        "Enter a valid updated mobile number: ").strip()
+                students_data["mobiles"] = mobile
+            elif choice == "5":
+                email = input("Enter updated email: ").strip()
+                while "@" not in email or email.split("@")[1] != "students.eui.edu.eg":
+                    email = input("Enter a valid email: ").strip()
+                students_data["emails"] = email
+            elif choice == "6":
+                try:
+                    gpa = float(input("Enter updated GPA: ").strip())
+                    while gpa > 4 or gpa < 0:
+                        gpa = float(input("Enter updated GPA: ").strip())
+                    students_data["c_gpas"][id_index] = gpa
+
+                except:
+                    print("...Invalid gpa value...")
+                    return
+            elif choice == "7":
+                pass
+
+            else:
+                print("No matching ids found")
+        return
+
+    def update_faculty(faculty_data):
+        pass
+
+    choice = input(
+        "1]Update a student\n2]Update a faculty member\nYour choice: [1,2]: ").strip()
+    while choice not in ["1", "2"]:
+        choice = input("Enter a valid choice please [1,2]: ").strip()
+    if choice == "1":
+        update_student(students_data)
+    else:
+        update_faculty(faculty_data)
+    return question(students_data, faculty_data)
