@@ -1,0 +1,332 @@
+import csv
+
+
+
+def input():
+    
+    task = input("How can we help you? \n"
+                 "Enter 1 for Grades Avarege \n"
+                 "Enter 2 for Highest Grade \n"
+                 "Enter 3 for Lowest Grade \n"
+                 "Enter 4 for Failed Students \n"
+                 "Enter 5 for Registered Students \n"
+                 "Enter 6 for Students In Specfic Range \n"
+                 "Enter 7 to Update Grades \n"
+                 "Enter 8 to Search For Students Details \n"
+                 "Enter 9 to see The success percentage in your course \n")
+    
+    return task
+
+
+
+def PH129():
+    students_csv = open('studs.csv', 'r')
+    read = csv.DictReader(students_csv)
+    
+    FName = []
+    LName = []
+    Id = []
+    Grade = []
+    
+    for i in read:
+        if i['PH129'] != 'None':
+            FName.append(i['First'])
+            LName.append(i['Last'])
+            Id.append(i['ID'])
+            Grade.append(i['PH129'])
+    
+    Needed = input()        
+    if Needed == 1:
+        AVR(Grade)
+        
+    elif Needed == 2:
+        Maxima(Grade)
+        
+    elif Needed == 3:
+        Minima(Grade)
+        
+    elif Needed == 4:
+        Failed(FName, LName, Id, Grade)
+        
+    elif Needed == 5:
+        Registered(FName, LName, Id, Grade)
+        
+    elif Needed == 6:
+        GWR(FName, LName, Id, Grade)
+        
+    elif Needed == 7:
+        Update()
+        
+    elif Needed == 8:
+        Search(FName, LName, Id, Grade)
+        
+    elif Needed == 9:
+        Success_Percentage(Grade)
+        
+        
+        
+def PH130():
+    students_csv = open('studs.csv', 'r')
+    read = csv.DictReader(students_csv)
+    
+    FName = []
+    LName = []
+    Id = []
+    Grade = []
+    
+    for i in read:
+        if i['PH130'] != 'None':
+            FName.append(i['First'])
+            LName.append(i['Last'])
+            Id.append(i['ID'])
+            Grade.append(i['PH130'])
+            
+    Needed = input()        
+    if Needed == 1:
+        AVR(Grade)
+        
+    elif Needed == 2:
+        Maxima(Grade)
+        
+    elif Needed == 3:
+        Minima(Grade)
+        
+    elif Needed == 4:
+        Failed(FName, LName, Id, Grade)
+        
+    elif Needed == 5:
+        Registered(FName, LName, Id, Grade)
+        
+    elif Needed == 6:
+        GWR(FName, LName, Id, Grade)
+        
+    elif Needed == 7:
+        Update(FName, LName, Id, Grade)
+        
+    elif Needed == 8:
+        Search(FName, LName, Id, Grade)
+        
+        
+    
+def AVR(Grade):
+    average = 0
+    
+    for mark in Grade:
+        average += int(mark)
+        
+    else:
+        average = average/len(Grade)
+        
+    print(f'The Grades Average in this course is equal to: {average:.2f}')
+    
+    
+
+def Maxima(FName, LName, Id, Grade):
+    MaxGrade = max(Grade)
+    print(f'The Maximum Grade in your class is for the student {FName[Grade.index(MaxGrade)]} {LName[Grade.index(MaxGrade)]}'
+          ', ID: {Id[Grade.index(MaxGrade)]} ,and his grade is {MaxGrade}')
+    
+    
+    
+def Minima(FName, LName, Id, Grade):
+    MinGrade = min(Grade)
+    print(f'The Maximum Grade in your class is for the student {FName[Grade.index(MinGrade)]} {LName[Grade.index(MinGrade)]}'
+          ', ID: {Id[Grade.index(MinGrade)]} ,and his grade is {MinGrade}')
+    
+    
+    
+def Failed(FName, LName, Id, Grade):
+    success = 60
+    
+    failed_fnames = []
+    failed_lnames = []
+    failed_ids = []
+    failed_grades = []
+    
+    for mark in Grade:
+        if int(mark) < success:
+            failed_fnames.append(FName[Grade.index(mark)])
+            failed_lnames.append(LName[Grade.index(mark)])
+            failed_ids.append(Id[Grade.index(mark)])
+            failed_grades.append(mark)
+            
+    print(f'The following students failed this course:\n')
+    for prints in range(len(failed_grades)):
+        print(f"{failed_fnames[prints]} {failed_lnames[prints]}, ID: {failed_ids[prints]}, Grade: {failed_grades[prints]}")
+        
+   
+     
+def Registered(FName, LName, Id):
+    for n in range(1, len(Id)+1):
+        print(f"{n}-{FName[n-1]} {LName[n-1]}, ID: {Id[n-1]}")
+        
+        
+
+def GWR(FName, LName, Id, Grade):
+    LO, HI  = input('Enter ther range of grades you want displayed. \n'
+                    '(Enter the lower grade limit followed by a space then the upper grade limit) \n').split(' ')
+    
+    InRange_grades = []
+    InRange_fnames = []
+    InRange_lnames = []
+    InRange_ids = []
+    
+    for mark in Grade:
+        if mark > int(LO) and mark < int(HI):
+            InRange_fnames.append(FName[Grade.index(mark)])
+            InRange_lnames.append(LName[Grade.index(mark)])
+            InRange_ids.append(Id[Grade.index(mark)])
+            InRange_grades.append(mark)
+            
+    print(f'The following students have a grade in the grade range of {LO} to {HI}: \n')
+    for students in range(len(InRange_grades)):
+        print(f"-{InRange_fnames[students]} {InRange_lnames[students]}, ID: {InRange_ids[students]}, Grade: {InRange_grades[students]}")
+    
+    
+
+def Success_Percentage(Grade):
+    failure = 59
+    percentage = 0
+    for mark in Grade:
+        if mark > failure:
+            percentage += 1
+            
+    else:
+        percentage = (percentage/len(Grade))
+        print(f'The percentage of succeeded students in this course is {percentage:%}')
+        
+        
+
+def Search(FName, LName, Id, Grade):
+    worked = False
+    
+    how = input('Search for the student using (enter 1 or 2): \n'
+                
+                '1-Their first name or last name \n'
+                
+                '2-Their ID \n'
+                
+                '(If you are searching by the name, the first letter should be capitalized): \n'
+                )
+    
+    searchKEY = input("Search with the type you chose here: \n")
+    if how == '1':
+        while (searchKEY not in FName) and (searchKEY not in LName):
+            print('The name you entered is wrong or is not in your course, please try again')
+            searchKEY = input("Write the name again: \n")
+        
+    
+        first_found = []
+        last_found = []
+        mark = []
+        name_id = []
+        
+        for first in FName:
+            if searchKEY == first:
+                first_found.append(searchKEY)
+                last_found.append(LName[FName.index(searchKEY)])
+                mark.append(Grade[FName.index(searchKEY)])
+                name_id.append(Id[FName.index(searchKEY)])
+                
+            
+        for last in LName:
+            if searchKEY == last:
+                first_found.append(FName[LName.index(searchKEY)])
+                last_found.append(searchKEY)
+                mark.append(Grade[LName.index(searchKEY)])
+                name_id.append(Id[LName.index(searchKEY)])
+                
+        for i in range(len(first_found)):
+            print(f'Here is what we found with that name: \n'
+                    
+                    f'Name: {first_found[i]} {last_found[i]} \n'
+                    
+                    f'ID: {name_id[i]}'
+                    
+                    f'Grade: {mark[i]} \n \n \n'
+                )
+            
+            
+            
+    if how == '2':
+        
+        while searchKEY not in i:
+            print('The ID you have entered is not correct! please try again.')
+            searchKEY = input("Write the ID again: \n")
+            
+        id_found = []
+        for id in i:
+            if searchKEY == id:
+                id_found.append(id)
+                break
+            
+        print(f'Here is what we found with that ID: \n'
+            
+            f'Name: {FName[Id.index(searchKEY)]} {LName[Id.index(searchKEY)]} \n'
+            
+            f'ID: {searchKEY}'
+            
+            f'Grade: {Grade[Id.index(searchKEY)]}'
+            )
+                
+            
+            
+                
+    
+def Update(f, l, i, g):
+    searchKEY = input("Search for the student you want their grade changed by their ID: \n")
+    
+    while searchKEY not in i:
+        print('The ID you have entered is not correct! please try again.')
+        searchKEY = input("Search for the student you want their grade changed by their ID: \n")
+        
+    id_found = []
+    for id in i:
+        if searchKEY == id:
+            id_found.append(id)
+            break
+            
+        
+    print(f'Here is what we found with that ID: \n'
+        
+        f'Name: {f[i.index(searchKEY)]} {l[i.index(id)]} \n'
+        
+        f'ID: {id} \n'
+        
+        f'Grade: {g[i.index(id)]}'
+        )
+
+
+    change = input('What is their new grade? \n')
+    
+    studs = open('test studs.csv', 'r')
+    studs_read = csv.reader(studs)
+        
+    
+        
+        
+        
+        
+    studs_read = list(studs_read)
+    
+    for i in studs_read:
+        if id in i:
+            for j in i:
+                if j == g[i.index(id)]:
+                    break
+            break
+        
+    
+    studs.close()
+        
+    studs_read[studs_read.index(i)][i.index(j)-1] = change
+
+    studs = open('test studs.csv', 'w')
+    
+    w = csv.writer(studs)
+    
+    w.writerows(studs_read)
+    studs.close()
+
+
+
