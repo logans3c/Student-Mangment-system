@@ -1,0 +1,24 @@
+-First name:Ahmed
+-Last name:Yasser
+-ID:F1012
+-Type:instructor
+-Courses taught:CA120 CA121 HU130
+__________________________________________________
+-First name:Hamdy
+-Last name:Sherif
+-ID:F1011
+-Type:instructor
+-Courses taught:PH139 PH240 CR504
+__________________________________________________
+-First name:Doaa
+-Last name:Diaa
+-ID:F1013
+-Type:staff
+-Courses taught:None
+__________________________________________________
+-First name:Ahmed
+-Last name:Sameh
+-ID:F1014
+-Type:instructor
+-Courses taught:CA120 CA121 PH139
+__________________________________________________
